@@ -1,0 +1,12 @@
+/* Layout Debugger Content Styles */
+
+.layout-debugger-label {
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Ensure labels stay on top */
+.layout-debugger-label {
+  position: absolute !important;
+  z-index: 999998 !important;
+}

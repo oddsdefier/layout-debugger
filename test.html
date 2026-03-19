@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout Debugger Test Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .header h1 {
+      color: #333;
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 30px;
+      border-radius: 12px;
+      color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .card-content {
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .flex-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .flex-item {
+      flex: 1;
+      min-width: 200px;
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .flex-item h3 {
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .flex-item p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .nested-container {
+      background: #e9ecef;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 40px;
+    }
+
+    .nested-inner {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .info-box {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .info-box h4 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .info-box ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .info-box li {
+      padding: 5px 0;
+      font-size: 14px;
+    }
+
+    .info-box li::before {
+      content: '✓ ';
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Layout Debugger Test Page</h1>
+      <p>Use the Layout Debugger extension to inspect the layout of this page</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-title">Card 1</div>
+        <div class="card-content">
+          This is a test card with some content. Click on it with the debugger active to see its properties.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Card 2</div>
+        <div class="card-content">
+          Another card with different content. All cards use CSS Grid layout.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Card 3</div>
+        <div class="card-content">
+          The third card demonstrates responsive grid behavior.
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-container">
+      <div class="flex-item">
+        <h3>Flex Item 1</h3>
+        <p>This container uses flexbox layout. Each item will grow to fill available space.</p>
+      </div>
+      <div class="flex-item">
+        <h3>Flex Item 2</h3>
+        <p>Flexbox makes it easy to create responsive layouts that adapt to different screen sizes.</p>
+      </div>
+      <div class="flex-item">
+        <h3>Flex Item 3</h3>
+        <p>Click on any of these items to inspect their flex properties in the debugger.</p>
+      </div>
+    </div>
+
+    <div class="nested-container">
+      <h2 style="color: #333; margin-bottom: 20px;">Nested Elements</h2>
+      <div class="nested-inner">
+        <h3 style="color: #667eea; margin-bottom: 15px;">Inner Container</h3>
+        <p style="color: #666; line-height: 1.6; margin-bottom: 15px;">
+          This demonstrates nested elements. The debugger will show borders for each level of nesting,
+          making it easy to visualize the document structure.
+        </p>
+        <div class="button-group">
+          <button class="btn btn-primary">Primary Button</button>
+          <button class="btn btn-secondary">Secondary Button</button>
+          <button class="btn btn-primary">Another Button</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <h4>How to Use the Debugger</h4>
+      <ul>
+        <li>Click the extension icon to open the sidebar panel</li>
+        <li>Click "Show Borders" to activate the debugger</li>
+        <li>All elements will show colored borders based on their classes</li>
+        <li>An inspection sidebar will appear on the page</li>
+        <li>Click any element to see its detailed properties</li>
+        <li>Click "Hide Borders" to turn off the debugger</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

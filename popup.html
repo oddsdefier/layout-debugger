@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout Debugger</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-content">
+        <div class="header-title">
+          <h1>Layout Debugger</h1>
+          <button id="closeSidebarBtn" class="close-btn" title="Close sidebar">✕</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="controls">
+      <button id="toggleBordersBtn" class="btn btn-primary">
+        <span class="btn-icon">📦</span>
+        <span class="btn-text">Toggle Borders</span>
+      </button>
+      <div class="line-style-control">
+        <span class="line-style-label">Line style:</span>
+        <label class="line-style-option"><input type="radio" name="lineStyle" value="solid" checked> Solid</label>
+        <label class="line-style-option"><input type="radio" name="lineStyle" value="dotted"> Dotted</label>
+      </div>
+      <div class="size-unit-control">
+        <span class="line-style-label">Size unit:</span>
+        <label class="line-style-option"><input type="radio" name="sizeUnit" value="px" checked> px</label>
+        <label class="line-style-option"><input type="radio" name="sizeUnit" value="rem"> rem</label>
+        <label class="line-style-option"><input type="radio" name="sizeUnit" value="em"> em</label>
+      </div>
+    </div>
+
+    <div class="info">
+      <p class="info-text">
+        Click any element on the page to inspect it below
+      </p>
+      <div id="pageStatus" class="page-status"></div>
+    </div>
+
+    <div id="inspector" class="inspector">
+      <div class="inspector-header">
+        <h3>CSS Inspector</h3>
+        <div id="inspectorCopyActions" class="inspector-copy-actions" style="display: none;">
+          <button type="button" id="copySelectorBtn" class="copy-btn" title="Copy selector">Copy selector</button>
+          <button type="button" id="copyDimensionsBtn" class="copy-btn" title="Copy dimensions & box model">Copy dimensions</button>
+        </div>
+      </div>
+      <div id="inspectorContent" class="inspector-content">
+        <p class="inspector-empty">Click an element to inspect</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
