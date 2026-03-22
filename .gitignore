@@ -1,17 +1,40 @@
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
-# Editor files
+# Editors / IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# Logs
+# Cursor / AI assistant (local settings & caches — do not commit)
+.cursor/
+.cursorrules
+.cursorignore
+**/.cursor/
+
+# Claude (Code / local project settings)
+.claude/
+**/.claude/
+
+# Other common AI / tooling metadata (if present)
+.specstory/
+.codex/
+.copilot/
+
+# Logs & temp
 *.log
-
-# Temporary files
 *.tmp
+*.temp
 
+# Secrets & local env (if you add tooling later)
+.env
+.env.*
+!.env.example
+
+# Dependencies / build (if you add a toolchain later)
+node_modules/
+dist/
+build/

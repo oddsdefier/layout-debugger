@@ -19,7 +19,6 @@
 
     <div class="controls">
       <button id="toggleBordersBtn" class="btn btn-primary">
-        <span class="btn-icon">📦</span>
         <span class="btn-text">Toggle Borders</span>
       </button>
       <div class="line-style-control">
@@ -27,11 +26,23 @@
         <label class="line-style-option"><input type="radio" name="lineStyle" value="solid" checked> Solid</label>
         <label class="line-style-option"><input type="radio" name="lineStyle" value="dotted"> Dotted</label>
       </div>
-      <div class="size-unit-control">
-        <span class="line-style-label">Size unit:</span>
-        <label class="line-style-option"><input type="radio" name="sizeUnit" value="px" checked> px</label>
-        <label class="line-style-option"><input type="radio" name="sizeUnit" value="rem"> rem</label>
-        <label class="line-style-option"><input type="radio" name="sizeUnit" value="em"> em</label>
+      <div class="range-control">
+        <div class="range-control-header">
+          <span class="line-style-label">Border opacity</span>
+          <span id="borderOpacityValue" class="range-value">100%</span>
+        </div>
+        <input id="borderOpacityRange" class="range-input" type="range" min="5" max="100" step="5" value="100">
+      </div>
+      <div class="toggle-group">
+        <span class="line-style-label">Overlay labels:</span>
+        <label class="line-style-option"><input type="checkbox" name="labelElement" checked> Element</label>
+        <label class="line-style-option"><input type="checkbox" name="labelPadding" checked> Padding</label>
+        <label class="line-style-option"><input type="checkbox" name="labelMargin"> Margin</label>
+      </div>
+      <div class="toggle-group">
+        <span class="line-style-label">Inspect:</span>
+        <label class="line-style-option"><input type="checkbox" name="hoverInspect"> Hover preview</label>
+        <label class="line-style-option"><input type="checkbox" name="monochromeMode"> Monochrome</label>
       </div>
     </div>
 
@@ -45,10 +56,6 @@
     <div id="inspector" class="inspector">
       <div class="inspector-header">
         <h3>CSS Inspector</h3>
-        <div id="inspectorCopyActions" class="inspector-copy-actions" style="display: none;">
-          <button type="button" id="copySelectorBtn" class="copy-btn" title="Copy selector">Copy selector</button>
-          <button type="button" id="copyDimensionsBtn" class="copy-btn" title="Copy dimensions & box model">Copy dimensions</button>
-        </div>
       </div>
       <div id="inspectorContent" class="inspector-content">
         <p class="inspector-empty">Click an element to inspect</p>

@@ -5,7 +5,6 @@
   "description": "Debug and inspect CSS layouts with visual overlays and detailed information",
   "permissions": [
     "activeTab",
-    "scripting",
     "storage",
     "sidePanel"
   ],
@@ -39,4 +38,3 @@
     "service_worker": "background.js"
   }
 }
-
