@@ -9,7 +9,7 @@ const DEFAULT_LABEL_SETTINGS = {
   showPadding: true,
   showMargin: false
 };
-const DEFAULT_HOVER_INSPECT = true;
+const DEFAULT_HOVER_INSPECT = false;
 const DEFAULT_MONOCHROME_MODE = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -31,13 +31,40 @@ document.addEventListener('DOMContentLoaded', async () => {
   showPageStatus(tab);
   setupMessageListener();
 
-  window.addEventListener('beforeunload', () => {
+  function deactivateCurrentTab() {
     if (currentTabId) {
       chrome.tabs.sendMessage(currentTabId, { action: 'deactivateAll' }).catch(() => {});
     }
+  }
+
+  window.addEventListener('beforeunload', deactivateCurrentTab);
+
+  closeSidebarBtn?.addEventListener('click', () => {
+    deactivateCurrentTab();
+    window.close();
   });
 
-  closeSidebarBtn?.addEventListener('click', () => window.close());
+  // Deactivate when user switches tabs
+  chrome.tabs.onActivated.addListener(async (activeInfo) => {
+    deactivateCurrentTab();
+    showBorders = false;
+    updateBordersButton();
+    lastSelectedData = null;
+    lastHoverData = null;
+    clearInspector();
+    currentTabId = activeInfo.tabId;
+  });
+
+  // Deactivate when user navigates within the same tab
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+    if (tabId === currentTabId && changeInfo.status === 'loading') {
+      showBorders = false;
+      updateBordersButton();
+      lastSelectedData = null;
+      lastHoverData = null;
+      clearInspector();
+    }
+  });
   toggleBordersBtn?.addEventListener('click', async () => {
     await toggleBorders(tab.id);
   });
@@ -238,37 +265,11 @@ async function loadState(tabId) {
     const response = await sendMessage(tabId, 'getState');
     if (!response) return;
 
+    // Only sync showBorders from content script — it reflects actual toggle state
+    // All other settings come from stored controls (loadStoredControls)
     if (typeof response.showBorders === 'boolean') {
       showBorders = response.showBorders;
       updateBordersButton();
-    }
-
-    if (response.lineStyle) {
-      const lineStyleInput = document.querySelector(`input[name="lineStyle"][value="${response.lineStyle}"]`);
-      if (lineStyleInput) lineStyleInput.checked = true;
-    }
-
-    if (typeof response.borderOpacity === 'number') {
-      const range = document.getElementById('borderOpacityRange');
-      if (range) range.value = String(Math.round(response.borderOpacity * 100));
-      updateBorderOpacityValue(response.borderOpacity);
-    }
-
-    if (response.labelSettings) {
-      applyLabelSettingsToInputs(response.labelSettings);
-    }
-
-    if (typeof response.hoverInspectEnabled === 'boolean') {
-      const hoverInput = document.querySelector('input[name="hoverInspect"]');
-      if (hoverInput) hoverInput.checked = response.hoverInspectEnabled;
-      if (!response.hoverInspectEnabled) {
-        lastHoverData = null;
-      }
-    }
-
-    if (typeof response.monochromeEnabled === 'boolean') {
-      const monochromeInput = document.querySelector('input[name="monochromeMode"]');
-      if (monochromeInput) monochromeInput.checked = response.monochromeEnabled;
     }
   } catch (error) {
     showBorders = false;

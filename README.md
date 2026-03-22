@@ -54,4 +54,4 @@ Won’t run on some restricted URLs (e.g. `chrome-extension://`, Web Store, many
 
 ## License
 
-MIT
+[MIT](LICENSE)

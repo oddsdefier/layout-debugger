@@ -19,7 +19,7 @@ class LayoutDebugger {
     this.previewElement = null;
     this.mouseEnterHandler = null;
     this.mouseLeaveHandler = null;
-    this.hoverInspectEnabled = true;
+    this.hoverInspectEnabled = false;
     this.monochromeEnabled = false;
     this.selectionRef = null;
     this.boxModelOverlay = null;
@@ -1300,81 +1300,72 @@ class LayoutDebugger {
   }
 }
 
-// Initialize debugger
+// Lazy-initialized debugger — only created when popup sends a message
 let debuggerInstance = null;
 
-// Initialize debugger when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    if (!debuggerInstance) {
-      debuggerInstance = new LayoutDebugger();
-    }
-  });
-} else {
-  // DOM is already ready
+function ensureInstance() {
   if (!debuggerInstance) {
     debuggerInstance = new LayoutDebugger();
   }
+  return debuggerInstance;
 }
 
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // Ensure instance exists
-  if (!debuggerInstance) {
-    debuggerInstance = new LayoutDebugger();
+  // Only create instance on demand, not on page load
+  if (request.action === 'ping') {
+    sendResponse({ success: true });
+    return true;
   }
 
-  switch (request.action) {
-    case 'ping':
-      // Health check to see if content script is loaded
-      sendResponse({ success: true });
-      break;
+  const instance = ensureInstance();
 
+  switch (request.action) {
     case 'toggleBorders':
-      const lineStyle = request.lineStyle || debuggerInstance.lineStyle;
+      const lineStyle = request.lineStyle || instance.lineStyle;
       if (request.borderOpacity !== undefined) {
-        debuggerInstance.setBorderOpacity(request.borderOpacity);
+        instance.setBorderOpacity(request.borderOpacity);
       }
       if (request.labelSettings) {
-        debuggerInstance.setLabelSettings(request.labelSettings);
+        instance.setLabelSettings(request.labelSettings);
       }
-      const bordersActive = debuggerInstance.toggleBorders(lineStyle);
+      const bordersActive = instance.toggleBorders(lineStyle);
       sendResponse({
         success: true,
         active: bordersActive,
-        lineStyle: debuggerInstance.lineStyle,
-        borderOpacity: debuggerInstance.borderOpacity,
-        labelSettings: debuggerInstance.labelSettings
+        lineStyle: instance.lineStyle,
+        borderOpacity: instance.borderOpacity,
+        labelSettings: instance.labelSettings
       });
       break;
 
     case 'setLineStyle':
-      debuggerInstance.setLineStyle(request.lineStyle);
-      sendResponse({ success: true, lineStyle: debuggerInstance.lineStyle });
+      instance.setLineStyle(request.lineStyle);
+      sendResponse({ success: true, lineStyle: instance.lineStyle });
       break;
 
     case 'setBorderOpacity':
-      debuggerInstance.setBorderOpacity(request.borderOpacity);
-      sendResponse({ success: true, borderOpacity: debuggerInstance.borderOpacity });
+      instance.setBorderOpacity(request.borderOpacity);
+      sendResponse({ success: true, borderOpacity: instance.borderOpacity });
       break;
 
     case 'setLabelSettings':
-      debuggerInstance.setLabelSettings(request.labelSettings);
-      sendResponse({ success: true, labelSettings: debuggerInstance.labelSettings });
+      instance.setLabelSettings(request.labelSettings);
+      sendResponse({ success: true, labelSettings: instance.labelSettings });
       break;
 
     case 'setHoverInspect':
-      debuggerInstance.setHoverInspect(request.hoverInspectEnabled);
-      sendResponse({ success: true, hoverInspectEnabled: debuggerInstance.hoverInspectEnabled });
+      instance.setHoverInspect(request.hoverInspectEnabled);
+      sendResponse({ success: true, hoverInspectEnabled: instance.hoverInspectEnabled });
       break;
 
     case 'setMonochromeMode':
-      debuggerInstance.setMonochromeMode(request.monochromeEnabled);
-      sendResponse({ success: true, monochromeEnabled: debuggerInstance.monochromeEnabled });
+      instance.setMonochromeMode(request.monochromeEnabled);
+      sendResponse({ success: true, monochromeEnabled: instance.monochromeEnabled });
       break;
 
     case 'navigateSelection': {
-      const target = debuggerInstance.navigateSelection(request.direction);
+      const target = instance.navigateSelection(request.direction);
       if (!target) {
         sendResponse({ success: false, error: 'No navigation target' });
         break;
@@ -1384,19 +1375,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 
     case 'deactivateAll':
-      debuggerInstance.destroy();
+      instance.destroy();
       debuggerInstance = null;
       sendResponse({ success: true });
       break;
 
     case 'getState':
       sendResponse({
-        showBorders: debuggerInstance.showBorders,
-        lineStyle: debuggerInstance.lineStyle,
-        borderOpacity: debuggerInstance.borderOpacity,
-        labelSettings: debuggerInstance.labelSettings,
-        hoverInspectEnabled: debuggerInstance.hoverInspectEnabled,
-        monochromeEnabled: debuggerInstance.monochromeEnabled
+        showBorders: instance.showBorders,
+        lineStyle: instance.lineStyle,
+        borderOpacity: instance.borderOpacity,
+        labelSettings: instance.labelSettings,
+        hoverInspectEnabled: instance.hoverInspectEnabled,
+        monochromeEnabled: instance.monochromeEnabled
       });
       break;
 
