@@ -1,0 +1,8 @@
+# Default reviewer for all project files
+* @oddsdefier
+
+# Extra attention for permissions, policies, and contributor automation
+/manifest.json @oddsdefier
+/.github/ @oddsdefier
+/SECURITY.md @oddsdefier
+/PRIVACY.md @oddsdefier

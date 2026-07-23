@@ -1,57 +1,102 @@
 # Layout Debugger
 
-Chrome extension (Manifest V3) that draws **layout overlays** on the page and shows a **CSS inspector** in the **side panel** so you can debug structure, box model, flex, and grid.
+[![Validate](https://github.com/oddsdefier/layout-debugger/actions/workflows/validate.yml/badge.svg)](https://github.com/oddsdefier/layout-debugger/actions/workflows/validate.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-4285F4.svg)](manifest.json)
+[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
+A lightweight Chrome extension that makes CSS layout problems visible. It draws overlays directly on a page and provides a side-panel inspector for structure, box model, Flexbox, and Grid information.
+
+> **Project status:** early-stage, functional, and open to feedback and contributions.
+
+## Why this exists
+
+Browser developer tools are powerful, but layout problems can still be difficult to understand at a glance. Layout Debugger focuses on a smaller workflow: select an element, see its boundaries and spacing, then move through nearby elements without repeatedly searching the DOM tree.
+
+## Features
+
+- Draw borders around page elements.
+- Display optional element, padding, and margin labels.
+- Inspect dimensions, margin, padding, borders, and layout properties.
+- Show Flexbox and Grid details when relevant.
+- Navigate to the selected element’s parent, previous sibling, next sibling, or child.
+- Preview elements while hovering.
+- Adjust line style, opacity, labels, and monochrome mode.
+- Persist preferences locally between side-panel sessions.
 
 ## Requirements
 
-- **Chromium** browser with **Side Panel** support (Chrome, Edge, Brave, etc.).
+- A Chromium-based browser with Side Panel support, such as Chrome, Edge, or Brave.
+- A normal web page. Browser-managed URLs, extension pages, PDFs, and some restricted pages cannot be inspected.
 
-## Install (development)
+## Install for development
 
-1. Open `chrome://extensions/`
-2. Turn on **Developer mode**
-3. Click **Load unpacked**
-4. Choose this folder (`layout-debugger`)
+1. Clone or download this repository.
+2. Open `chrome://extensions/`.
+3. Enable **Developer mode**.
+4. Select **Load unpacked**.
+5. Choose the repository directory.
 
-Ensure `icons/icon16.png`, `icons/icon48.png`, and `icons/icon128.png` exist (they are included in this repo).
+No build step is currently required.
 
-## Use
+## Usage
 
-1. Click the extension icon → the **side panel** opens (`popup.html`).
-2. Click **Toggle borders** → outlines and optional labels appear on the page.
-3. **Click an element** on the page → details show in **CSS Inspector** (dimensions, margin, padding, borders, layout, flex/grid when relevant).
-4. Use **Parent / Prev / Next / Child** in the inspector to move the selection without hunting in the DOM.
-5. Turn **Toggle borders** off when finished.
+1. Click the extension icon to open the side panel.
+2. Select **Toggle borders** to draw layout outlines.
+3. Click an element on the page to inspect it.
+4. Use **Parent**, **Prev**, **Next**, and **Child** to move through nearby elements.
+5. Disable borders when finished.
 
-### Side panel options
+### Side-panel controls
 
 | Control | Purpose |
-|--------|---------|
-| Line style | Solid or dotted outlines |
-| Border opacity | Fade overlays so you can see the page underneath |
-| Overlay labels | Toggle element / padding / margin labels on the page |
-| Hover preview | Inspect the element under the cursor (when enabled) |
-| Monochrome | Use a single outline color instead of per-element hues |
+| --- | --- |
+| Line style | Switch between solid and dotted outlines |
+| Border opacity | Fade overlays to keep page content visible |
+| Overlay labels | Show or hide element, padding, and margin labels |
+| Hover preview | Inspect the element currently under the pointer |
+| Monochrome | Use one outline color instead of per-element colors |
 
-Settings are stored with `chrome.storage.local` and restored when you open the panel again.
+## Privacy and permissions
 
-## How it works (short)
+Layout Debugger processes inspected layout information locally. The current implementation does not include analytics or transmit inspected page data to an external server. Preferences are stored with `chrome.storage.local`.
 
-- **`content.js`** — Runs on web pages: draws outlines/labels, handles click/hover, collects `getComputedStyle` + geometry, talks to the panel via `chrome.runtime.sendMessage`.
-- **`popup.js` / `popup.html` / `popup.css`** — Side panel UI and inspector rendering.
-- **`background.js`** — Opens the side panel when the toolbar icon is clicked.
-- **`manifest.json`** — Permissions (`activeTab`, `storage`, `sidePanel`), content scripts, icons.
+The extension requests page access so its content script can draw overlays and read computed layout information. See [PRIVACY.md](PRIVACY.md) for details.
 
-## Reload after code changes
+## Project structure
 
-1. `chrome://extensions/` → **Reload** the extension.
-2. Close and reopen the side panel for UI changes.
-3. **Refresh** the tab you’re debugging for content script changes.
+- `content.js` and `content.css` draw overlays, handle page interaction, and collect layout information.
+- `popup.js`, `popup.html`, and `popup.css` implement the side-panel interface.
+- `background.js` opens the side panel from the toolbar action.
+- `manifest.json` defines Manifest V3 permissions, scripts, icons, and extension metadata.
+
+## Development workflow
+
+After changing files:
+
+1. Reload the extension from `chrome://extensions/`.
+2. Close and reopen the side panel after interface changes.
+3. Refresh the inspected tab after content-script changes.
+
+Pull requests run a lightweight validation workflow that checks the manifest, JavaScript syntax, required documentation, and extension icons.
+
+## Contributing
+
+Contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), search existing issues, and keep pull requests focused on one problem.
+
+Useful project documents:
+
+- [Roadmap](ROADMAP.md)
+- [Support guide](SUPPORT.md)
+- [Security policy](SECURITY.md)
+- [Code of conduct](CODE_OF_CONDUCT.md)
 
 ## Limitations
 
-Won’t run on some restricted URLs (e.g. `chrome-extension://`, Web Store, many `chrome://` system pages, `view-source:`, `data:`, PDFs). The panel shows a short message when the page isn’t supported.
+- The extension cannot run on many `chrome://`, `chrome-extension://`, Web Store, `view-source:`, `data:`, and PDF pages.
+- Browser compatibility currently focuses on Chromium browsers with Side Panel support.
+- Automated browser tests are not yet included; contributors should follow the manual validation checklist.
 
 ## License
 
-[MIT](LICENSE)
+Layout Debugger is available under the [MIT License](LICENSE).

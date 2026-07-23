@@ -1,0 +1,43 @@
+name: Feature request
+description: Suggest an improvement to layout debugging
+title: "feat: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Explain the debugging problem first. Proposed solutions are welcome, but the use case is the most important part.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      placeholder: Describe a real CSS or layout debugging situation.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: What should Layout Debugger do?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: How do you handle this problem today?
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add sketches, examples, or related tools when useful.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and the roadmap.
+          required: true
+        - label: This request is related to layout inspection or debugging.
+          required: true
